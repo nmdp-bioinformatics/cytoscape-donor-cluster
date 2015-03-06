@@ -1,0 +1,21 @@
+dependencies:
+  - name: cytoscape
+    version: 1.0.1
+    src: "htmlwidgets/lib/cytoscape.js-2.3.9/build"
+    script: cytoscape.min.js
+  - name: arbor
+    version: 1.0.1
+    src: "htmlwidgets/lib/cytoscape.js-2.3.9/lib"
+    script: arbor.js
+  - name: cola
+    version: 1.0.1
+    src: "htmlwidgets/lib/cytoscape.js-2.3.9/lib"
+    script: cola.v3.min.js
+  - name: dagre
+    version: 1.0.1
+    src: "htmlwidgets/lib/cytoscape.js-2.3.9/lib"
+    script: dagre.js
+  - name: springy
+    version: 1.0.1
+    src: "htmlwidgets/lib/cytoscape.js-2.3.9/lib"
+    script: springy.js
