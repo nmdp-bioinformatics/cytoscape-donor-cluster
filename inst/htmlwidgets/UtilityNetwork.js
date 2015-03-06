@@ -13,86 +13,80 @@ HTMLWidgets.widget({
   },
 
   resize: function(el, width, height, instance) {
+    //console.log("yep");
+     if (instance.cy)
+      instance.cy.resize();
 
   },
 
 
   renderValue: function(el, x, instance) {
 
+
+    //var links = HTMLWidgets.dataframeToD3(x.nodeEntries);
+
+    //console.log(links)
+
+
   instance.cy = new cytoscape({
   container: el,
+  style: cytoscape.stylesheet()
+          	.selector('node')
+            		.css({
+                		'content': 'data(name)',
+                		'text-valign': 'center',
+                		'color': 'white',
+                		'text-outline-width': 2,
+                        'shape': 'data(shape)',
+                        'text-outline-color': 'data(color)',
+                        'background-color': 'data(color)'
+            		})
+        		.selector('edge')
+        		    .css({
+                    	'line-color': 'data(color)',
+                        'source-arrow-color': 'data(color)',
+                    	'target-arrow-color': 'data(color)',
+                        'source-arrow-shape': 'data(edgeSourceShape)',
+                		'target-arrow-shape': 'data(edgeTargetShape)'
+            		})
+    		.selector(':selected')
+            		.css({
+                		'background-color': 'black',
+                		'line-color': 'black',
+                		'target-arrow-color': 'black',
+                		'source-arrow-color': 'black'
+            		})
+    		.selector('.faded')
+            		.css({
+                		'opacity': 0.25,
+                		'text-opacity': 0
+            		}),
 
-  elements: [
-    { // node n1
-      group: 'nodes', // 'nodes' for a node, 'edges' for an edge
+  elements: {
+    //nodes: x.nodeEntries //doesn't work due to data formatting
+      nodes: [{ data: { id:'509209821', name:'509209821', color:'#888888', shape:'ellipse', href:''} }, { data: { id:'531376085', name:'531376085', color:'#888888', shape:'ellipse', href:''} }],
+  //edgesL  x.edgeEntries //same crap
+      edges: [{ data: { source:'509209821', target:'531376085', color:'#888888', edgeSourceShape:'none', edgeTargetShape:'triangle'} }]
 
-      // NB: id fields must be strings
-      data: { // element data (put dev data here)
-        id: 'n1', // mandatory for each element, assigned automatically on undefined
-        parent: 'nparent', // indicates the compound node parent id; not defined => no parent
-      },
-
-      position: { // the model position of the node (optional on init, mandatory after)
-        x: 100,
-        y: 100
-      },
-
-      selected: false, // whether the element is selected (default false)
-
-      selectable: true, // whether the selection state is mutable (default true)
-
-      locked: false, // when locked a node's position is immutable (default false)
-
-      grabbable: true, // whether the node can be grabbed and moved by the user
-
-      classes: 'foo bar', // a space separated list of class names that the element has
-
-      // NB: you should only use `css` for very special cases; use classes instead
-      css: { 'background-color': 'red' } // overriden style properties
     },
 
-    { // node n2
-      group: 'nodes',
-      data: { id: 'n2' },
-      renderedPosition: { x: 200, y: 200 } // can alternatively specify position in rendered on-screen pixels
-    },
+    		layout: {
+    		    name: x.layout,
+    		    padding: 10
+    		},
 
-    { // node n3
-      group: 'nodes',
-      data: { id: 'n3', parent: 'nparent' },
-      position: { x: 123, y: 234 }
-    },
+            ready: function() {
+                window.cy = this;
 
-    { // node nparent
-      group: 'nodes',
-      data: { id: 'nparent', position: { x: 200, y: 100 } }
-    },
+                cy.on('tap', 'node', function(){
+                    if(this.data('href').length > 0) {
+                        window.open(this.data('href'));
+                    }
 
-    { // edge e1
-      group: 'edges',
-      data: {
-        id: 'e1',
-        source: 'n1', // the source node id (edge comes from this node)
-        target: 'n2'  // the target node id (edge goes to this node)
-      }
-    }
-  ],
-
-  layout: {
-    name: 'preset'
-  },
-
-  // so we can see the ids
-  style: [
-    {
-      selector: 'node',
-      css: {
-        'content': 'data(id)'
-      }
-    }
-  ]
-
-});
+                    //console.log(this.data('href'));
+                });
+            }
+    	});
 
 
   }
