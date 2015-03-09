@@ -90,7 +90,7 @@ HTMLWidgets.widget({
                 //});
 
                 cy.on('mousemove','node', function(event){
-                  console.log(event);
+                //console.log(event);
 
                 var target = event.cyTarget;
                 var sourceName = target.data("id");
@@ -105,8 +105,8 @@ HTMLWidgets.widget({
 
                         $(el).qtip({
                             content: {
-                                title:targetName,
-                                text: sourceName
+                                title: sourceName,
+                                text: targetName
                             },
                             show: {
                                 delay: 0,
