@@ -82,13 +82,75 @@ HTMLWidgets.widget({
             ready: function() {
                 window.cy = this;
 
-                cy.on('tap', 'node', function(){
-                    if(this.data('href').length > 0) {
-                        window.open(this.data('href'));
-                    }
-
+                //cy.on('tap', 'node', function(){
+                    //if(this.data('href').length > 0) {
+                    //    alert(this.data('href'));
+                    //}
                     //console.log(this.data('href'));
+                //});
+
+                cy.on('mousemove','node', function(event){
+
+                var target = event.cyTarget;
+                var sourceName = target.data("id");
+                var targetName = target.data("href");
+                console.log(sourceName);
+                console.log(targetName);
+
+
+                var x=event.cyPosition.x;
+                var y=event.cyPosition.y;
+
+
+                        $("#blahh").qtip({
+                            content: {
+                                title:targetName,
+                                text: sourceName
+                            },
+                            show: {
+                                delay: 0,
+                                event: false,
+                                ready: true,
+                                effect:false
+
+                            },
+                            position: {
+                                my: 'bottom center',
+                                at: 'top center',
+
+                                target: [x, y],
+                                adjust: {
+                                    x: -7,
+                                    y:-7
+
+                                }
+
+                            },
+                            hide: {
+                                fixed: true,
+                                event: false,
+                                inactive: 2000
+
+                            },
+
+
+                            style: {
+                                classes: 'ui-tooltip-shadow ui-tooltip-youtube',
+
+                                tip:
+                                {
+                                    corner: true,
+                                    width: 24,         // resize the caret
+                                    height: 24         // resize the caret
+                                }
+
+                            }
+
                 });
+            });
+
+
+
             }
     	});
 

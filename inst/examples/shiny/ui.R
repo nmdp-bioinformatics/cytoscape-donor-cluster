@@ -41,7 +41,8 @@ body <- dashboardBody(
     #second tab content
     tabItem(tabName="Network",
             box(status = "primary",title = "Network Diagram", solidHeader = TRUE, width = NULL,collapsible = F,
-                UtilityNetworkOutput("Chart",height="700px")
+                UtilityNetworkOutput("Chart",height="700px"),
+                shiny::div(id="blahh")
             )###end box
     )
   )###end all tab items

@@ -96,7 +96,8 @@ shinyServer(function(input, output, session) {
     nodeData <- data.frame(id, stringsAsFactors=FALSE)
     joinProperties <- data.frame(id=data$NMDP_DID,
                                  color=gray(1-scale_var(var=data$UtilityScore,interval=c(0.1,1))),
-                                 name=round(data$UtilityScore,2))
+                                 name=round(data$UtilityScore,2),
+                                 href=data$DNR_AGE)
 
     nodeData <- nodeData %>%
       inner_join(joinProperties)
