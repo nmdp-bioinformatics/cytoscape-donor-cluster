@@ -26,6 +26,7 @@
 #' edgeData <- data.frame(source, target, stringsAsFactors=FALSE)
 #'
 #' network <- createCytoscapeNetwork(nodeData, edgeData)
+#' @export
 createCytoscapeNetwork <- function(nodeData, edgeData,
                                    nodeColor="#888888", nodeShape="ellipse",
                                    edgeColor="#888888", edgeSourceShape="none",
@@ -55,7 +56,7 @@ createCytoscapeNetwork <- function(nodeData, edgeData,
     nodeData$href <- rep(nodeHref, nrow(nodeData))
   }
 
-
+  rownames(nodeData) <- NULL
     nodeEntries <- apply(nodeData,1,function(x){
       list(data=as.list(x))
     })
@@ -76,7 +77,7 @@ createCytoscapeNetwork <- function(nodeData, edgeData,
     edgeData$edgeTargetShape <- rep(edgeTargetShape, nrow(edgeData))
   }
 
-
+  rownames(edgeData) <- NULL
   edgeEntries <- apply(edgeData,1,function(x){
     list(data=as.list(x))
   })

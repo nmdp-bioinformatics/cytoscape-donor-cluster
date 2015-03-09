@@ -1,6 +1,7 @@
+library(shiny)
 library(CytoscapeDonorCluster)
-
-data <- read.table("RID2261405.txt",sep="\t",header=T,stringsAsFactors = F)
+setwd("~/CytoscapeDonorCluster/inst/examples/shiny")
+data <- read.table("../../../RID2261405.txt",sep="\t",header=T,stringsAsFactors = F)
 PERCENTILE <- 0.1 ###what percentile of data to keep
 ndonor <- nrow(data)
 Kernel_matrix <- matrix(nrow=ndonor,ncol=ndonor)
@@ -39,5 +40,17 @@ nodeData$shape <- rep("ellipse", nrow(nodeData))
 nodeData$shape[which(grepl("[a-z]", nodes))] <- "octagon"
 edgeData <- edgeList
 cyNetwork <- createCytoscapeNetwork(nodeData, edgeData)
-UtilityNetwork(nodeEntries=cyNetwork$nodes, edgeEntries=cyNetwork$edges,
-               layout="grid",width = NULL, height = NULL)
+
+shinyServer(function(input, output) {
+
+
+
+  output$Chart <- renderUtilityNetwork({
+    UtilityNetwork(nodeEntries=cyNetwork$nodes, edgeEntries=cyNetwork$edges,
+                   layout="springy",width = NULL, height = NULL)
+  })
+
+
+
+
+})
