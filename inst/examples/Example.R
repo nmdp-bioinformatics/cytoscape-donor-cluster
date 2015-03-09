@@ -18,7 +18,6 @@ CDF <- ecdf(dist)
 threshold <- quantile(CDF,probs=PERCENTILE)
 hist(dist,breaks=200,main="Kernel Distance Scores")
 abline(v=threshold,lwd=2,lty=2)
-
 Kernel_matrix[Kernel_matrix>=threshold] <- NA
 
 inds <- which(!is.na(Kernel_matrix),arr.ind = T)

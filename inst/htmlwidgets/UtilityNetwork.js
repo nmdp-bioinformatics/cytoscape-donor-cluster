@@ -22,10 +22,14 @@ HTMLWidgets.widget({
 
   renderValue: function(el, x, instance) {
 
+    console.log(x.nodeEntries);
+    console.log(x.edgeEntries);
 
-    //var links = HTMLWidgets.dataframeToD3(x.nodeEntries);
+    //var nodetest = JSON.parse(x.nodeEntries);
+    //var edgetest = JSON.parse(x.edgeEntries);
 
-    //console.log(links)
+    //console.log(nodetest);
+    //console.log(edgetest);
 
 
   instance.cy = new cytoscape({
@@ -63,10 +67,10 @@ HTMLWidgets.widget({
             		}),
 
   elements: {
-    //nodes: x.nodeEntries //doesn't work due to data formatting
-      nodes: [{ data: { id:'509209821', name:'509209821', color:'#888888', shape:'ellipse', href:''} }, { data: { id:'531376085', name:'531376085', color:'#888888', shape:'ellipse', href:''} }],
-  //edgesL  x.edgeEntries //same crap
-      edges: [{ data: { source:'509209821', target:'531376085', color:'#888888', edgeSourceShape:'none', edgeTargetShape:'triangle'} }]
+    nodes: x.nodeEntries, //doesn't work due to data formatting
+    //nodes: [{ data: { id:'509209821', name:'509209821', color:'#888888', shape:'ellipse', href:''} }, { data: { id:'531376085', name:'531376085', color:'#888888', shape:'ellipse', href:''} }],
+    edges:  x.edgeEntries //same crap
+      //edges: [{ data: { source:'509209821', target:'531376085', color:'#888888', edgeSourceShape:'none', edgeTargetShape:'triangle'} }]
 
     },
 

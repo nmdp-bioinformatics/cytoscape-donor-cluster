@@ -55,24 +55,12 @@ createCytoscapeNetwork <- function(nodeData, edgeData,
     nodeData$href <- rep(nodeHref, nrow(nodeData))
   }
 
-  nodeEntries <- NULL
 
-  for(i in 1:nrow(nodeData)) {
-    tmpEntries <- NULL
+    nodeEntries <- apply(nodeData,1,function(x){
+      list(data=as.list(x))
+    })
 
-    for(col in colnames(nodeData)) {
-      tmp2 <- paste0(col, ":'", nodeData[i, col], "'")
-      tmpEntries <- c(tmpEntries, tmp2)
-    }
 
-    tmpEntries <- paste(tmpEntries, collapse=", ")
-
-    tmp <- paste0("{ data: { ", tmpEntries, "} }")
-
-    nodeEntries <- c(nodeEntries, tmp)
-  }
-
-  nodeEntries <- paste(nodeEntries, collapse=", ")
 
   # EDGES
   ## Add color/shape columns if not present
@@ -88,24 +76,11 @@ createCytoscapeNetwork <- function(nodeData, edgeData,
     edgeData$edgeTargetShape <- rep(edgeTargetShape, nrow(edgeData))
   }
 
-  edgeEntries <- NULL
 
-  for(i in 1:nrow(edgeData)) {
-    tmpEntries <- NULL
+  edgeEntries <- apply(edgeData,1,function(x){
+    list(data=as.list(x))
+  })
 
-    for(col in colnames(edgeData)) {
-      tmp2 <- paste0(col, ":'", edgeData[i, col], "'")
-      tmpEntries <- c(tmpEntries, tmp2)
-    }
-
-    tmpEntries <- paste(tmpEntries, collapse=", ")
-
-    tmp <- paste0("{ data: { ", tmpEntries, "} }")
-
-    edgeEntries <- c(edgeEntries, tmp)
-  }
-
-  edgeEntries <- paste(edgeEntries, collapse=", ")
 
   network <- list(nodes=nodeEntries, edges=edgeEntries)
 
@@ -120,7 +95,6 @@ createCytoscapeNetwork <- function(nodeData, edgeData,
 #'
 #' @export
 UtilityNetwork <- function(nodeEntries, edgeEntries, layout="cola",width = NULL, height = NULL) {
-
   # forward options using x
   x = list()
   x$nodeEntries <- nodeEntries
