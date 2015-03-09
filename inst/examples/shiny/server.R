@@ -2,20 +2,50 @@ library(shiny)
 library(CytoscapeDonorCluster)
 library(dplyr)
 library(shinydashboard)
+library(data.table)
 
 
 
 shinyServer(function(input, output, session) {
 
   DATA <- reactive({
-    setwd("~/CytoscapeDonorCluster/inst/examples/shiny")
-    data <- read.table("../../../RID2261405.txt",sep="\t",header=T,stringsAsFactors = F)
+    inFile <- input$dataset
+    if (is.null(inFile))
+      return(NULL)
+    data <- fread(inFile$datapath,sep="\t",header=T,stringsAsFactors = F)
+    data <- as.data.frame(data)
+    return(list(data=data))
+  })
+
+  output$UtilityRange <- renderUI({
+    data <- DATA()[["data"]]
+    min <- min(data$UtilityScore)
+    max <- max(data$UtilityScore)
+    sliderInput("UtilityRange","Utility Range to View",min=min,max=max,value=c(min,max))
+  })
+
+  output$UtilityCut <- renderPlot(function(){
+    data <- DATA()[["data"]]
+    if(is.null(data)){return(NULL)}
+    hist(data$UtilityScore,breaks=200,main="Donor Utility Scores")
+    abline(v=input$UtilityRange[1],lwd=2,lty=2)
+    abline(v=input$UtilityRange[2],lwd=2,lty=2)
+  })
+
+
+  DATACUT <- reactive({
+    data <- DATA()[["data"]]
+    if(is.null(data)){return(NULL)}
+    data <- data  %>% filter(UtilityScore >=input$UtilityRange[1],
+                             UtilityScore <=input$UtilityRange[2])
+    data <- as.data.frame(data)
     return(list(data=data))
   })
 
 
   KernelMatrix <- reactive({
-    data <- DATA()[["data"]]
+    data <- DATACUT()[["data"]]
+    if(is.null(data)){return(NULL)}
     ndonor <- nrow(data)
     Kernel_matrix <- matrix(nrow=ndonor,ncol=ndonor)
     for( i in 1:ndonor){
@@ -32,6 +62,7 @@ shinyServer(function(input, output, session) {
   KernelThresholded <- reactive({
     PERCENTILE <- input$percentile ###what percentile of data to keep
     Kernel_matrix <- KernelMatrix()[["Kernel_matrix"]]
+    if(is.null(Kernel_matrix)){return(NULL)}
     dist <- unlist(Kernel_matrix)
     CDF <- ecdf(dist)
     threshold <- quantile(CDF,probs=PERCENTILE)
@@ -41,6 +72,7 @@ shinyServer(function(input, output, session) {
 
   output$ThresholdPlot <- renderPlot(function(){
     Kernel_matrix <- KernelThresholded()[["Kernel_matrix"]]
+    if(is.null(Kernel_matrix)){return(NULL)}
     dist<- KernelThresholded()[["dist"]]
     threshold<- KernelThresholded()[["threshold"]]
     hist(dist,breaks=200,main="Kernel Distance Scores")
@@ -49,7 +81,8 @@ shinyServer(function(input, output, session) {
 
 
   SVMNetwork <- reactive({
-    data <- DATA()[["data"]]
+    data <- DATACUT()[["data"]]
+    if(is.null(data)){return(NULL)}
     Kernel_matrix <- KernelThresholded()[["Kernel_matrix"]]
     inds <- which(!is.na(Kernel_matrix),arr.ind = T)
     value <- Kernel_matrix[inds]
@@ -77,6 +110,7 @@ shinyServer(function(input, output, session) {
 
   output$Chart <- renderUtilityNetwork({
     cyNetwork <- SVMNetwork()[["cyNetwork"]]
+    if(is.null(cyNetwork)){return(NULL)}
     UtilityNetwork(nodeEntries=cyNetwork$nodes, edgeEntries=cyNetwork$edges)
   })
 

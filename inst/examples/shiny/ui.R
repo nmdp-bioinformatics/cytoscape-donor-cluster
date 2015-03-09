@@ -15,16 +15,27 @@ body <- dashboardBody(
   tabItems(
     #first tab content
     tabItem(tabName="Kernel",
+            box(status = "primary",title = "Utility Threshold", solidHeader = TRUE, width = NULL,collapsible = F,
+                fluidRow(
+                  column(width=3,
+                         fileInput("dataset","Pick SVM Dataset"),
+                         uiOutput("UtilityRange")
+                         ),
+                  column(width=9,
+                         plotOutput("UtilityCut")
+                         )
+                  )
+            ),###end box content
             box(status = "primary",title = "Kernel Settings", solidHeader = TRUE, width = NULL,collapsible = F,
                 fluidRow(
                   column(width=3,
                          sliderInput("percentile","Percentile of Edges to Retain",
                                      min=0,max=1,value=0.1)
-                         ),
+                  ),
                   column(width=9,
                          plotOutput("ThresholdPlot")
-                         )
                   )
+                )
             )###end box content
     ),
     #second tab content
