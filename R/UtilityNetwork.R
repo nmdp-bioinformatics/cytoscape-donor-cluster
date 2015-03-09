@@ -95,12 +95,14 @@ createCytoscapeNetwork <- function(nodeData, edgeData,
 #' @import htmlwidgets
 #'
 #' @export
-UtilityNetwork <- function(nodeEntries, edgeEntries, layout="cola",width = NULL, height = NULL) {
+UtilityNetwork <- function(nodeEntries, edgeEntries, layout="cose",width = NULL, height = NULL) {
   # forward options using x
   x = list()
   x$nodeEntries <- nodeEntries
   x$edgeEntries <- edgeEntries
   x$layout <- layout
+
+
 
   # create widget
   htmlwidgets::createWidget(
