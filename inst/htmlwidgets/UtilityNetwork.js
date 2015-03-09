@@ -90,19 +90,20 @@ HTMLWidgets.widget({
                 //});
 
                 cy.on('mousemove','node', function(event){
+                  console.log(event);
 
                 var target = event.cyTarget;
                 var sourceName = target.data("id");
                 var targetName = target.data("href");
-                console.log(sourceName);
-                console.log(targetName);
+                //console.log(sourceName);
+                //console.log(targetName);
 
 
-                var x=event.cyPosition.x;
-                var y=event.cyPosition.y;
+                var x=event.cyRenderedPosition.x;
+                var y=event.cyRenderedPosition.y;
+                //console.log("x="+x+" Y="+y);
 
-
-                        $("#blahh").qtip({
+                        $(el).qtip({
                             content: {
                                 title:targetName,
                                 text: sourceName
@@ -115,16 +116,12 @@ HTMLWidgets.widget({
 
                             },
                             position: {
-                                my: 'bottom center',
-                                at: 'top center',
 
                                 target: [x, y],
                                 adjust: {
-                                    x: -7,
-                                    y:-7
-
+                                    x: 100,
+                                    y: 100
                                 }
-
                             },
                             hide: {
                                 fixed: true,
