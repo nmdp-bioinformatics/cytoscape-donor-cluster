@@ -122,6 +122,10 @@ shinyServer(function(input, output, session) {
                                             "<td>", "Weight (Kg):" ,"</td>",
                                             "<td>",data$DNR_WT,"</td>",
                                             "</tr>",
+                                            "<tr>",
+                                            "<td>", "Donor Ctr:" ,"</td>",
+                                            "<td>",data$DC_CDE,"</td>",
+                                            "</tr>",
                                             "</table>"))
 
     nodeData <- nodeData %>%
