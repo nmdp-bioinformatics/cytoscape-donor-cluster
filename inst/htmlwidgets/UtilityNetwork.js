@@ -105,8 +105,11 @@ HTMLWidgets.widget({
 
                         $(el).qtip({
                             content: {
-                                title: sourceName,
-                                text: targetName
+                                title: "DID: " + sourceName,
+                                text: function(event, api) {
+                                // Retrieve content from custom attribute of the $('.selector') elements.
+                                return targetName;
+                                }
                             },
                             show: {
                                 delay: 0,
