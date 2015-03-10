@@ -60,6 +60,14 @@ HTMLWidgets.widget({
                 		'target-arrow-color': 'black',
                 		'source-arrow-color': 'black'
             		})
+        .selector('.highlighted')
+                .css({
+                    'background-color': '#61bffc',
+                    'line-color': '#61bffc',
+                    'target-arrow-color': '#61bffc',
+                    'transition-property': 'background-color, line-color, target-arrow-color',
+                    'transition-duration': '0.5s'
+                })
     		.selector('.faded')
             		.css({
                 		'opacity': 0.25,
@@ -85,12 +93,35 @@ HTMLWidgets.widget({
 
                 cy.on('tap', 'node', function(event){
                     var nodes = this.closedNeighborhood().connectedNodes();
-                    var obj = nodes._private.ids;
+                    nodes.toggleClass("highlighted");
+
+                    var globalnodes = instance.cy.nodes();
+                    var selected = [];
+                    for(var i = 0; i< globalnodes.length; i++){
+                      if(globalnodes[i].hasClass("highlighted")){
+                        selected.push(globalnodes[i]._private.ids);
+                      }
+                    }
+
+                    console.log(globalnodes);
+                    console.log(selected);
+
                     var keys = [];
-                    for(var k in obj) keys.push(k);
+                    for(var i = 0; i< selected.length; i++){
+                      var kk = selected[i];
+                      for(var k in kk) keys.push(k);
+                    }
                     //console.log(keys);
-                    //console.log(this.closedNeighborhood().sources());
                     Shiny.onInputChange(el.id + "_click_node", keys);
+
+
+
+
+                    //var obj = nodes._private.ids;
+                    //var keys = [];
+                    //for(var k in obj) keys.push(k);
+                    //console.log(keys);
+                    //Shiny.onInputChange(el.id + "_click_node", keys);
                 });
 
                 cy.on('mousemove','node', function(event){
