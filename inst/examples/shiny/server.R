@@ -140,5 +140,18 @@ shinyServer(function(input, output, session) {
     UtilityNetwork(nodeEntries=cyNetwork$nodes, edgeEntries=cyNetwork$edges)
   })
 
+  DATATABLE <- reactive({
+    id <- input$Chart_click_node
+    id <- as.numeric(id)
+    data <- DATACUT()[["data"]]
+    out <- filter(data,NMDP_DID %in% id)
+    return(out)
+  })
+
+
+  output$DID <- renderDataTable(
+    DATATABLE(),
+    options=list(scrollX=TRUE)
+  )
 
 })

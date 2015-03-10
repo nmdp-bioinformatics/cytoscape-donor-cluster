@@ -40,9 +40,11 @@ body <- dashboardBody(
     ),
     #second tab content
     tabItem(tabName="Network",
-            box(status = "primary",title = "Network Diagram", solidHeader = TRUE, width = NULL,collapsible = F,
-                UtilityNetworkOutput("Chart",height="700px"),
-                shiny::div(id="blahh")
+            box(status = "primary",title = "Network Diagram", solidHeader = TRUE, width = NULL,collapsible = T,
+                UtilityNetworkOutput("Chart",height="600px")
+            ),###end box
+            box(status = "primary",title = "Selected Donors", solidHeader = TRUE, width = NULL,collapsible = T,
+                dataTableOutput("DID")
             )###end box
     )
   )###end all tab items

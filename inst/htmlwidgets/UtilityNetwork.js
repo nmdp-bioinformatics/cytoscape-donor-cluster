@@ -76,18 +76,22 @@ HTMLWidgets.widget({
 
     		layout: {
     		    name: x.layout,
-    		    padding: 10
+    		    padding: 10,
+            ungrabifyWhileSimulating: true
     		},
 
             ready: function() {
                 window.cy = this;
 
-                //cy.on('tap', 'node', function(){
-                    //if(this.data('href').length > 0) {
-                    //    alert(this.data('href'));
-                    //}
-                    //console.log(this.data('href'));
-                //});
+                cy.on('tap', 'node', function(event){
+                    var nodes = this.closedNeighborhood().connectedNodes();
+                    var obj = nodes._private.ids;
+                    var keys = [];
+                    for(var k in obj) keys.push(k);
+                    //console.log(keys);
+                    //console.log(this.closedNeighborhood().sources());
+                    Shiny.onInputChange(el.id + "_click_node", keys);
+                });
 
                 cy.on('mousemove','node', function(event){
                 //console.log(event);
