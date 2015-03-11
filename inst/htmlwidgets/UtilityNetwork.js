@@ -92,8 +92,25 @@ HTMLWidgets.widget({
                 window.cy = this;
 
                 cy.on('tap', 'node', function(event){
+                    var nodeHighlighted = this.hasClass("highlighted");
+                    //console.log(nodeHighlighted);
                     var nodes = this.closedNeighborhood().connectedNodes();
-                    nodes.toggleClass("highlighted");
+
+                    if(nodeHighlighted){
+                      for(var i = 0; i< nodes.length; i++){
+                        if(nodes[i].hasClass("highlighted")){
+                          nodes[i].toggleClass("highlighted");
+                        }
+                      }
+                    }else{
+                      for(var i = 0; i< nodes.length; i++){
+                        if(!nodes[i].hasClass("highlighted")){
+                          nodes[i].toggleClass("highlighted");
+                        }
+                      }
+                    }
+
+
 
                     var globalnodes = instance.cy.nodes();
                     var selected = [];
@@ -103,8 +120,8 @@ HTMLWidgets.widget({
                       }
                     }
 
-                    console.log(globalnodes);
-                    console.log(selected);
+                    //console.log(globalnodes);
+                    //console.log(selected);
 
                     var keys = [];
                     for(var i = 0; i< selected.length; i++){
