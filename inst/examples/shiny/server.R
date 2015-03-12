@@ -3,7 +3,7 @@ library(CytoscapeDonorCluster)
 library(dplyr)
 library(shinydashboard)
 library(data.table)
-
+library(parcoords)
 
 
 shinyServer(function(input, output, session) {
@@ -12,10 +12,32 @@ shinyServer(function(input, output, session) {
     inFile <- input$dataset
     if (is.null(inFile))
       return(NULL)
-    data <- fread(inFile$datapath,sep="\t",header=T,stringsAsFactors = F)
+    data <- read.table(inFile$datapath,sep="\t",header=T,stringsAsFactors=TRUE)
     data <- as.data.frame(data)
+    data <- data[,c("UtilityScore","NMDP_DID","X10OF10","DNR_AGE",
+                    "DNR_SEX","DNR_BLOOD_TYPE","DNR_RH_TYPE","DNR_WT",
+                    "DC_CDE")]
     return(list(data=data))
   })
+
+  BRUSHDATA <- reactive({
+    data <- DATA()[["data"]]
+    if(is.null(data)){return(NULL)}
+    data <- data[,c("UtilityScore","X10OF10","DNR_AGE","DNR_WT",
+                    "DNR_SEX","DNR_BLOOD_TYPE","DNR_RH_TYPE",
+                    "DC_CDE")]
+    data$DNR_WT[is.na(data$DNR_WT)] <- 0 ###parcoords cannot handle NA fields
+    return(list(data=data))
+  })
+
+  output$DataBrush <- renderParcoords({
+    data <- BRUSHDATA()[["data"]]
+    if(is.null(data)){return(NULL)}
+    parcoords(data,rownames=F, brushMode = "2D-strums",reorderable = T)
+  })
+
+
+
 
   output$UtilityRange <- renderUI({
     data <- DATA()[["data"]]
