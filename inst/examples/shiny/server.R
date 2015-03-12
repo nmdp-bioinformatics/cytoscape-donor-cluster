@@ -6,6 +6,8 @@ library(data.table)
 if(!require(parcoords))
 devtools::install_github("albre116/parcoords")
 
+options(shiny.maxRequestSize=500*1024^2)###500 megabyte file upload limit set
+
 
 
 shinyServer(function(input, output, session) {
