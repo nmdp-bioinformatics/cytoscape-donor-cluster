@@ -3,7 +3,9 @@ library(CytoscapeDonorCluster)
 library(dplyr)
 library(shinydashboard)
 library(data.table)
-library(parcoords)
+if(!require(parcoords))
+devtools::install_github("albre116/parcoords")
+
 
 
 shinyServer(function(input, output, session) {
@@ -33,21 +35,31 @@ shinyServer(function(input, output, session) {
   output$DataBrush <- renderParcoords({
     data <- BRUSHDATA()[["data"]]
     if(is.null(data)){return(NULL)}
-    parcoords(data,rownames=F, brushMode = "2D-strums",reorderable = T)
+    parcoords(data,rownames=T, brushMode = "2D-strums",reorderable = T)
+  })
+
+  KEPTDATA <- reactive({
+    data <- DATA()[["data"]]
+    ids <- rownames(data) %in% input$DataBrush_brushed_row_names
+    data <- data[ids,]
+    return(list(data=data))
+  })
+
+  output$selectedData <- renderDataTable({
+    data <- KEPTDATA()[["data"]]
+    return(data)
   })
 
 
-
-
   output$UtilityRange <- renderUI({
-    data <- DATA()[["data"]]
+    data <- KEPTDATA()[["data"]]
     min <- min(data$UtilityScore)
     max <- max(data$UtilityScore)
     sliderInput("UtilityRange","Utility Range to View",min=min,max=max,value=c(min,max))
   })
 
   output$UtilityCut <- renderPlot(function(){
-    data <- DATA()[["data"]]
+    data <- KEPTDATA()[["data"]]
     if(is.null(data)){return(NULL)}
     hist(data$UtilityScore,breaks=200,main="Donor Utility Scores")
     abline(v=input$UtilityRange[1],lwd=2,lty=2)
@@ -56,7 +68,7 @@ shinyServer(function(input, output, session) {
 
 
   DATACUT <- reactive({
-    data <- DATA()[["data"]]
+    data <- KEPTDATA()[["data"]]
     if(is.null(data)){return(NULL)}
     data <- data  %>% filter(UtilityScore >=input$UtilityRange[1],
                              UtilityScore <=input$UtilityRange[2])
