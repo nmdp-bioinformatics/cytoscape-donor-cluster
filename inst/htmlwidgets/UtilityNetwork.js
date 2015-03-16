@@ -89,7 +89,8 @@ HTMLWidgets.widget({
 
             ready: function() {
                 window.cy = this;
-
+                cy.boxSelectionEnabled(true);
+                cy.userZoomingEnabled( false );
                 cy.on('tap', 'node', function(event){
                     var nodeHighlighted = this.hasClass("highlighted");
                     //console.log(nodeHighlighted);
