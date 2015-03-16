@@ -12,8 +12,8 @@ header <- dashboardHeader(title = "SVM Network")
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Parallel Coords",tabName="Brush",icon = icon("fa fa-car")),
-    menuItem("Kernel Settings",tabName="Kernel",icon = icon("dashboard")),
-    menuItem("Network Diagram",tabName="Network",icon = icon("th"))
+    menuItem("Network Diagram",tabName="Network",icon = icon("th")),
+    menuItem("Kernel Settings",tabName="Kernel",icon = icon("dashboard"))
   ),
   fileInput("dataset","Pick SVM Dataset")
 )
@@ -25,6 +25,7 @@ body <- dashboardBody(
             box(status = "primary",title = "Parallel Coordinates with Brush Select", solidHeader = TRUE, width = NULL,collapsible = T,
                 fluidRow(
                   column(width=12,
+                         h2(textOutput("donorsSelected")),
                          parcoordsOutput("DataBrush")
                   )
                 )
@@ -38,16 +39,6 @@ body <- dashboardBody(
             )###end box content
     ),
     tabItem(tabName="Kernel",
-            box(status = "primary",title = "Utility Threshold", solidHeader = TRUE, width = NULL,collapsible = T,
-                fluidRow(
-                  column(width=3,
-                         uiOutput("UtilityRange")
-                         ),
-                  column(width=9,
-                         plotOutput("UtilityCut")
-                         )
-                  )
-            ),###end box content
             box(status = "primary",title = "Kernel Settings", solidHeader = TRUE, width = NULL,collapsible = T,
                 fluidRow(
                   column(width=3,

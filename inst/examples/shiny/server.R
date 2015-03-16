@@ -10,7 +10,7 @@ devtools::install_github("albre116/parcoords")
 options(shiny.maxRequestSize=500*1024^2)###500 megabyte file upload limit set
 
 
-
+flag<<-0 ##global variable to set for brush initilization
 shinyServer(function(input, output, session) {
 
   DATA <- reactive({
@@ -38,13 +38,14 @@ shinyServer(function(input, output, session) {
   output$DataBrush <- renderParcoords({
     data <- BRUSHDATA()[["data"]]
     if(is.null(data)){return(NULL)}
-    parcoords(data,rownames=T, brushMode = "2D-strums",reorderable = T)
+    parcoords(data,rownames=F, brushMode = "2D-strums",reorderable = T)
   })
 
   KEPTDATA <- reactive({
     data <- DATA()[["data"]]
     ids <- rownames(data) %in% input$DataBrush_brushed_row_names
-    data <- data[ids,]
+    if(!is.null(input$DataBrush_brushed_row_names)){flag<<-1}#trigger first pass through
+    if(flag==1){data <- data[ids,]}
     return(list(data=data))
   })
 
@@ -53,29 +54,19 @@ shinyServer(function(input, output, session) {
     return(data)
   })
 
-
-  output$UtilityRange <- renderUI({
-    data <- KEPTDATA()[["data"]]
-    min <- min(data$UtilityScore)
-    max <- max(data$UtilityScore)
-    sliderInput("UtilityRange","Utility Range to View",min=min,max=max,value=c(min,max))
+  output$donorsSelected <- renderText({
+    all <- nrow(DATA()[["data"]])
+    select <- nrow(KEPTDATA()[["data"]])
+    if(is.null(all) | is.null(select)){return(NULL)}
+    return(paste(select,"of",all,"donors selected"))
   })
 
-  output$UtilityCut <- renderPlot(function(){
-    data <- KEPTDATA()[["data"]]
-    if(is.null(data)){return(NULL)}
-    hist(data$UtilityScore,breaks=200,main="Donor Utility Scores")
-    abline(v=input$UtilityRange[1],lwd=2,lty=2)
-    abline(v=input$UtilityRange[2],lwd=2,lty=2)
-  })
+
+
 
 
   DATACUT <- reactive({
     data <- KEPTDATA()[["data"]]
-    if(is.null(data)){return(NULL)}
-    data <- data  %>% filter(UtilityScore >=input$UtilityRange[1],
-                             UtilityScore <=input$UtilityRange[2])
-    data <- as.data.frame(data)
     return(list(data=data))
   })
 
