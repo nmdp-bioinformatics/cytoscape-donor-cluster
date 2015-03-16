@@ -15,7 +15,11 @@ sidebar <- dashboardSidebar(
     menuItem("Network Diagram",tabName="Network",icon = icon("th")),
     menuItem("Kernel Settings",tabName="Kernel",icon = icon("dashboard"))
   ),
-  fileInput("dataset","Pick SVM Dataset")
+  fileInput("dataset","Pick SVM Dataset"),
+  selectInput("layout","Network Layout",choices=c("null","random","preset",
+                                                  "grid","circle","concentric",
+                                                  "breadthfirst","dagre","cose",
+                                                  "cola","arbor","springy"),selected="cose")
 )
 
 body <- dashboardBody(

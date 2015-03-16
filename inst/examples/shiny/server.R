@@ -78,7 +78,7 @@ shinyServer(function(input, output, session) {
     Kernel_matrix <- matrix(nrow=ndonor,ncol=ndonor)
     for( i in 1:ndonor){
       for (j in i:ndonor){
-        util_diff <-  abs(data$UtilityScore[i]-data$UtilityScore[j])
+        util_diff <-  (data$UtilityScore[i]-data$UtilityScore[j])
         Kernel_matrix[i,j] <- util_diff
       }
     }
@@ -91,17 +91,17 @@ shinyServer(function(input, output, session) {
     PERCENTILE <- input$percentile ###what percentile of data to keep
     Kernel_matrix <- KernelMatrix()[["Kernel_matrix"]]
     if(is.null(Kernel_matrix)){return(NULL)}
-    dist <- unlist(Kernel_matrix)
+    dist <- abs(unlist(Kernel_matrix))
     CDF <- ecdf(dist)
     threshold <- quantile(CDF,probs=PERCENTILE)
-    Kernel_matrix[Kernel_matrix>=threshold] <- NA
+    Kernel_matrix[abs(Kernel_matrix)>=threshold] <- NA
     return(list(Kernel_matrix=Kernel_matrix,dist=dist,threshold=threshold))
   })
 
   output$ThresholdPlot <- renderPlot(function(){
     Kernel_matrix <- KernelThresholded()[["Kernel_matrix"]]
     if(is.null(Kernel_matrix)){return(NULL)}
-    dist<- KernelThresholded()[["dist"]]
+    dist<- abs(KernelThresholded()[["dist"]])
     threshold<- KernelThresholded()[["threshold"]]
     hist(dist,breaks=200,main="Kernel Distance Scores")
     abline(v=threshold,lwd=2,lty=2)
@@ -116,7 +116,14 @@ shinyServer(function(input, output, session) {
     value <- Kernel_matrix[inds]
     network<-data.frame(data$NMDP_DID[inds[,1]],
                         value,data$NMDP_DID[inds[,2]])
+    ###order by source/edge connection
+    network <- apply(network,1,function(b){
+      i <- b[2]>=0
+      if(!i){return(b[c(3:1)])}else{return(b[c(1:3)])}
+    })
+    network <- as.data.frame(t(network))
     colnames(network) <- c("source", "interaction", "target")
+    network$interaction <- abs(network$interaction)
     network <- network[order(network$interaction,decreasing = F),]###sort by strength
     edgeList <- network[, c("source","target")]
     nodes <- unique(data$NMDP_DID)
@@ -169,7 +176,7 @@ shinyServer(function(input, output, session) {
   output$Chart <- renderUtilityNetwork({
     cyNetwork <- SVMNetwork()[["cyNetwork"]]
     if(is.null(cyNetwork)){return(NULL)}
-    UtilityNetwork(nodeEntries=cyNetwork$nodes, edgeEntries=cyNetwork$edges)
+    UtilityNetwork(nodeEntries=cyNetwork$nodes, edgeEntries=cyNetwork$edges,layout=input$layout)
   })
 
   DATATABLE <- reactive({
