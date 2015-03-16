@@ -13,7 +13,6 @@ HTMLWidgets.widget({
   },
 
   resize: function(el, width, height, instance) {
-    //console.log("yep");
      if (instance.cy)
       instance.cy.resize();
 
@@ -22,8 +21,8 @@ HTMLWidgets.widget({
 
   renderValue: function(el, x, instance) {
 
-    console.log(x.nodeEntries);
-    console.log(x.edgeEntries);
+    //console.log(x.nodeEntries);
+    //console.log(x.edgeEntries);
 
     //var nodetest = JSON.parse(x.nodeEntries);
     //var edgetest = JSON.parse(x.edgeEntries);
@@ -75,9 +74,9 @@ HTMLWidgets.widget({
             		}),
 
   elements: {
-    nodes: x.nodeEntries, //doesn't work due to data formatting
+    nodes: x.nodeEntries,
     //nodes: [{ data: { id:'509209821', name:'509209821', color:'#888888', shape:'ellipse', href:''} }, { data: { id:'531376085', name:'531376085', color:'#888888', shape:'ellipse', href:''} }],
-    edges:  x.edgeEntries //same crap
+    edges:  x.edgeEntries
       //edges: [{ data: { source:'509209821', target:'531376085', color:'#888888', edgeSourceShape:'none', edgeTargetShape:'triangle'} }]
 
     },

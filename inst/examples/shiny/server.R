@@ -1,5 +1,6 @@
 library(shiny)
-library(CytoscapeDonorCluster)
+if(!require(CytoscapeDonorCluster))
+  devtools::install_github("albre116/CytoscapeDonorCluster")
 library(dplyr)
 library(shinydashboard)
 library(data.table)
@@ -127,7 +128,7 @@ shinyServer(function(input, output, session) {
     colnames(network) <- c("source", "interaction", "target")
     network <- network[order(network$interaction,decreasing = F),]###sort by strength
     edgeList <- network[, c("source","target")]
-    nodes <- unique(c(edgeList$source, edgeList$target))
+    nodes <- unique(data$NMDP_DID)
     id <- nodes
     nodeData <- data.frame(id, stringsAsFactors=FALSE)
     joinProperties <- data.frame(id=data$NMDP_DID,
