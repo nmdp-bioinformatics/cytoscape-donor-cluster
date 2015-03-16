@@ -26,7 +26,9 @@ body <- dashboardBody(
                 fluidRow(
                   column(width=12,
                          h2(textOutput("donorsSelected")),
-                         parcoordsOutput("DataBrush")
+                         parcoordsOutput("DataBrush"),
+                         selectInput("brushType","Select Brush Type",
+                                     choices=c("1D-axes","2D-strums"),selected=c("1D-axes"))
                   )
                 )
             ),###end box content

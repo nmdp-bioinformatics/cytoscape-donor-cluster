@@ -38,7 +38,7 @@ shinyServer(function(input, output, session) {
   output$DataBrush <- renderParcoords({
     data <- BRUSHDATA()[["data"]]
     if(is.null(data)){return(NULL)}
-    parcoords(data,rownames=F, brushMode = "2D-strums",reorderable = T)
+    parcoords(data,rownames=F, brushMode = input$brushType,reorderable = T)
   })
 
   KEPTDATA <- reactive({
