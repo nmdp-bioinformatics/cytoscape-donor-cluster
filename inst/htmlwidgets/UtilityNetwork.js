@@ -94,6 +94,12 @@ HTMLWidgets.widget({
                     var nodeHighlighted = this.hasClass("highlighted");
                     //console.log(nodeHighlighted);
                     var nodes = this.closedNeighborhood().connectedNodes();
+                    //console.log(nodes);
+
+
+                    if(nodes.length===0){
+                      this.toggleClass("highlighted");
+                    }
 
                     if(nodeHighlighted){
                       for(var i = 0; i< nodes.length; i++){
