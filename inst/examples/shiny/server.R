@@ -55,7 +55,7 @@ shinyServer(function(input, output, session) {
     DT::datatable(KEPTDATA()[["data"]],filter='bottom',extensions = 'TableTools',
                   options = list(
                     dom = 'T<"clear">lfrtip',
-                    tableTools = list(sSwfPath = copySWF())
+                    tableTools = list(sSwfPath = copySWF('www'))
                     )
                   )
   })
@@ -199,7 +199,7 @@ shinyServer(function(input, output, session) {
     DT::datatable(DATATABLE(),filter='bottom',extensions = 'TableTools',
                   options = list(
                     dom = 'T<"clear">lfrtip',
-                    tableTools = list(sSwfPath = copySWF())
+                    tableTools = list(sSwfPath = copySWF('www'))
                     )
                   )
     })
