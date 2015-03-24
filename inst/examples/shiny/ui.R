@@ -6,6 +6,8 @@ library(shinydashboard)
 library(data.table)
 if(!require(parcoords))
   devtools::install_github("albre116/parcoords")
+if(!require("DT"))
+  devtools::install_github("rstudio/DT")
 
 header <- dashboardHeader(title = "SVM Network")
 
@@ -39,7 +41,7 @@ body <- dashboardBody(
             box(status = "primary",title = "Brush Selected Data", solidHeader = TRUE, width = NULL,collapsible = T,
                 fluidRow(
                   column(width=12,
-                         dataTableOutput("selectedData")
+                         DT::dataTableOutput("selectedData")
                   )
                 )
             )###end box content
@@ -63,7 +65,7 @@ body <- dashboardBody(
                 UtilityNetworkOutput("Chart",height="600px")
             ),###end box
             box(status = "primary",title = "Selected Donors", solidHeader = TRUE, width = NULL,collapsible = T,
-                dataTableOutput("DID")
+                DT::dataTableOutput("DID")
             )###end box
     )
   )###end all tab items

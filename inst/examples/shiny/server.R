@@ -6,6 +6,8 @@ library(shinydashboard)
 library(data.table)
 if(!require(parcoords))
 devtools::install_github("albre116/parcoords")
+if(!require("DT"))
+  devtools::install_github("rstudio/DT")
 
 options(shiny.maxRequestSize=500*1024^2)###500 megabyte file upload limit set
 
@@ -49,10 +51,15 @@ shinyServer(function(input, output, session) {
     return(list(data=data))
   })
 
-  output$selectedData <- renderDataTable({
-    data <- KEPTDATA()[["data"]]
-    return(data)
+  output$selectedData <- DT::renderDataTable({
+    DT::datatable(KEPTDATA()[["data"]],filter='bottom',extensions = 'TableTools',
+                  options = list(
+                    dom = 'T<"clear">lfrtip',
+                    tableTools = list(sSwfPath = copySWF('www'))
+                    )
+                  )
   })
+
 
   output$donorsSelected <- renderText({
     all <- nrow(DATA()[["data"]])
@@ -188,9 +195,14 @@ shinyServer(function(input, output, session) {
   })
 
 
-  output$DID <- renderDataTable(
-    DATATABLE(),
-    options=list(scrollX=TRUE)
-  )
+  output$DID <- DT::renderDataTable({
+    DT::datatable(DATATABLE(),filter='bottom',extensions = 'TableTools',
+                  options = list(
+                    dom = 'T<"clear">lfrtip',
+                    tableTools = list(sSwfPath = copySWF('www'))
+                    )
+                  )
+    })
+
 
 })
