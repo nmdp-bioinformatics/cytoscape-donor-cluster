@@ -1,13 +1,3 @@
-library(shiny)
-if(!require(CytoscapeDonorCluster))
-  devtools::install_github("albre116/CytoscapeDonorCluster")
-library(dplyr)
-library(shinydashboard)
-library(data.table)
-if(!require(parcoords))
-devtools::install_github("albre116/parcoords")
-if(!require("DT"))
-  devtools::install_github("rstudio/DT")
 
 options(shiny.maxRequestSize=500*1024^2)###500 megabyte file upload limit set
 
