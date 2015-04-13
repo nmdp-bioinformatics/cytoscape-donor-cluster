@@ -1,6 +1,6 @@
 library(shiny)
 library(CytoscapeDonorCluster)
-#devtools::install_github("albre116/CytoscapeDonorCluster")
+#devtools::install_github("nmdp-bioinformatics/CytoscapeDonorCluster")
 library(dplyr)
 library(shinydashboard)
 library(data.table)
